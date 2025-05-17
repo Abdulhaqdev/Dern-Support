@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Ticket } from '@/types';
+import { Ticket, ScheduleSlot, RepairQuote } from '@/types';
 import { 
   Select,
   SelectContent,
@@ -22,6 +22,8 @@ import { useRouter } from 'next/navigation';
 
 interface ScheduleCalendarProps {
   ticket: Ticket;
+  availableSlots: ScheduleSlot[];
+  repairQuote?: RepairQuote;
 }
 
 const timeSlots = [
@@ -30,7 +32,7 @@ const timeSlots = [
   '16:00', '16:30', '17:00', '17:30'
 ];
 
-export function ScheduleCalendar({ ticket }: ScheduleCalendarProps) {
+export function ScheduleCalendar({ ticket, availableSlots, repairQuote }: ScheduleCalendarProps) {
   const [date, setDate] = useState<Date>();
   const [time, setTime] = useState<string>();
   const [deliveryOption, setDeliveryOption] = useState('office');
@@ -64,7 +66,8 @@ export function ScheduleCalendar({ ticket }: ScheduleCalendarProps) {
     }
   };
 
-  const estimatedCost = {
+  // Use repairQuote if available, otherwise fallback to default estimated cost
+  const estimatedCost: { parts: number; labor: number; total: number } = repairQuote as any || {
     parts: 150000,
     labor: 100000,
     total: 250000
@@ -73,7 +76,7 @@ export function ScheduleCalendar({ ticket }: ScheduleCalendarProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-lg">Ticket #{ticket.id}</CardTitle>
+        <CardTitle className="text-lg">Chipta #{ticket.id}</CardTitle>
         <p className="text-sm text-muted-foreground">{ticket.title}</p>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -99,11 +102,19 @@ export function ScheduleCalendar({ ticket }: ScheduleCalendarProps) {
               <SelectValue placeholder="Vaqtni tanlang" />
             </SelectTrigger>
             <SelectContent>
-              {timeSlots.map((slot) => (
-                <SelectItem key={slot} value={slot}>
-                  {slot}
-                </SelectItem>
-              ))}
+              {availableSlots.length > 0 ? (
+                availableSlots.map((slot) => (
+                  <SelectItem key={slot.startTime} value={slot.startTime}>
+                    {slot.startTime}
+                  </SelectItem>
+                ))
+              ) : (
+                timeSlots.map((slot) => (
+                  <SelectItem key={slot} value={slot}>
+                    {slot}
+                  </SelectItem>
+                ))
+              )}
             </SelectContent>
           </Select>
         </div>
