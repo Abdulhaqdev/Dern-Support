@@ -149,15 +149,15 @@ export function ScheduleCalendar({ ticket, availableSlots, repairQuote }: Schedu
           <div className="space-y-1">
             <div className="flex justify-between">
               <span>Ehtiyot qismlar:</span>
-              <span>{estimatedCost.parts.toLocaleString()} {"so'm"}</span>
+              <span>{estimatedCost.parts} {"so'm"}</span>
             </div>
             <div className="flex justify-between">
               <span>Ish haqi:</span>
-              <span>{estimatedCost.labor.toLocaleString()}{" so'm"}</span>
+              <span>{estimatedCost.labor}{" so'm"}</span>
             </div>
             <div className="flex justify-between font-medium pt-2 border-t mt-2">
               <span>Jami:</span>
-              <span>{estimatedCost.total.toLocaleString()} {"so'm"}</span>
+              <span>{estimatedCost.total} {"so'm"}</span>
             </div>
           </div>
         </div>
