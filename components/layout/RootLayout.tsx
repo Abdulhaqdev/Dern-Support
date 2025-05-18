@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <ThemeProvider 
       attribute="class" 
-      defaultTheme="light" 
+      defaultTheme="dark" 
       enableSystem={true}
     >
       <div className="relative min-h-screen   flex flex-col">
